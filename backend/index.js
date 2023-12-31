@@ -1,18 +1,19 @@
 import express, { json } from 'express'
 import userRouter from './router/userRouter.js'
 import mongoose from 'mongoose';
+import cookieParser  from 'cookie-parser';
+
 // const dotenv=require('dotenv').config()
 import dotenv from 'dotenv';
 dotenv.config();
-import cors from 'cors'
+
 const app=express()
 
 const port =process.env.PORT ||3000;
 
-
-
 app.use(json());
-app.use(cors())
+app.use(cookieParser());
+app.use(express.urlencoded({extended:false}))
 
 app.use('/auth/user',userRouter)
 

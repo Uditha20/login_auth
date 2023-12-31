@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import axios from "axios";
+import {useNavigate } from 'react-router-dom';
+import {toast} from 'react-hot-toast';
 
 
 function Register() {
+  const navigation =useNavigate();
 
   const [data,setData]=useState({
     name:"",
@@ -11,28 +14,41 @@ function Register() {
 
   })
 
-  const changeHandler=(e)=>{
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  // const changeHandler=(e)=>{
+  //   const { name, value } = e.target;
+  //   setData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
    
-  }
+  // }
   const registerUser=async(e)=>{
     e.preventDefault();
+    const {name,email,password}=data
     try {
-      const response = await axios.post('http://127.0.0.1:5000/auth/user/register', data);
+      const {data} = await axios.post('/register', {
+        name,email,password
+      });
+      if(data.err){
+        toast.error(data.err);
+      }
+      else{
+        setData({})
+        toast.success("successfull register");
+        navigation('/')
+      }
+
+      // console.log(data)
 
       // Assuming the backend returns a response with a success message
-      console.log(response.data);
+     
 
       // Optionally, you can reset the form data after successful submission
-      setData({
-        name: '',
-        email: '',
-        password: '',
-      });
+      // setData({
+      //   name: '',
+      //   email: '',
+      //   password: '',
+      // });
 
       // You can also redirect the user or perform other actions based on the response
     } catch (error) {
@@ -71,9 +87,9 @@ function Register() {
               name="name"
               type="text"
               autoComplete="current-password"
-              required
+
               value={data.name}
-              onChange={changeHandler}
+              onChange={(e)=>setData({...data,name:e.target.value})}
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -88,7 +104,7 @@ function Register() {
               name="email"
               type="email"
               value={data.email}
-              onChange={changeHandler}
+              onChange={(e)=>setData({...data,email:e.target.value})}
               autoComplete="email"
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -109,7 +125,7 @@ function Register() {
               name="password"
               type="password"
               value={data.password}
-              onChange={changeHandler}
+              onChange={(e)=>setData({...data,password:e.target.value})}
               autoComplete="current-password"
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

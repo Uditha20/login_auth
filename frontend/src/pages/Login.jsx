@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
+import {toast} from 'react-hot-toast';
+import {useNavigate } from 'react-router-dom';
 function Login() {
+  const navigation =useNavigate();
   // useEffect(()=>{
   //   axios.get('http://127.0.0.1:5000/auth/user/auth')
 
@@ -11,13 +14,13 @@ function Login() {
   //       console.log(err)
   //   })
   // },[])
-     axios.get('http://127.0.0.1:5000/auth/user/auth')
-     .then(()=>{
-          console.log("connect")
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+    //  axios.get('http://127.0.0.1:5000/auth/user/auth')
+    //  .then(()=>{
+    //       console.log("connect")
+    //     })
+    //     .catch((err)=>{
+    //         console.log(err)
+    //     })
 
  
 
@@ -35,8 +38,23 @@ function Login() {
     
  }
 
-  const userLogin=(e)=>{
+  const userLogin=async(e)=>{
     e.preventDefault();
+    const{email,password}=data;
+    try{
+      const response=await axios.post('/',{email,password})
+      
+      if(response.data){
+        navigation('/dashboard')
+      }else{
+        setData({})
+        toast.error("invalid");
+
+        // toast.success("login ok")
+      }
+    }catch(err){
+      console.log(err.message)
+    }
   }
   return (
    <div><div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

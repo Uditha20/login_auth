@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcryptjs'
 
 const userSchema =new mongoose.Schema({
     name:{
@@ -12,9 +13,12 @@ const userSchema =new mongoose.Schema({
     password:{
         type:String,
         require:[true,'please enter the password'],
-        minlength:5
+        minlength:5,
+        // select:false
     }
 })
+
+
 
 const User=mongoose.model('User',userSchema);
 
